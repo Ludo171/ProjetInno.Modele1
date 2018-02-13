@@ -4,6 +4,7 @@ public class Agent {
 	
 	private int id;
 	public static int compteurAgentsId;
+	private int age;
 	
 	private Marche marche;
 	private double richesse;
@@ -24,6 +25,7 @@ public class Agent {
 		this.id = this.compteurAgentsId;
 		this.compteurAgentsId+=1;
 		
+		this.age = 0;
 		this.marche = marche;
 		this.richesse = richesseInitiale;
 		this.mu=mu;
@@ -136,8 +138,38 @@ public class Agent {
 		this.alpha = alpha;
 	}
 
-
 	
+	
+
+	public int getAge() {
+		return age;
+	}
+
+
+	public void setAge(int age) {
+		this.age = age;
+	}
+
+
+	public double getProbaMort() {
+		return probaMort;
+	}
+
+
+	public void setProbaMort(double probaMort) {
+		this.probaMort = probaMort;
+	}
+
+
+	public double getProbaEnfant() {
+		return probaEnfant;
+	}
+
+
+	public void setProbaEnfant(double probaEnfant) {
+		this.probaEnfant = probaEnfant;
+	}
+
 
 	public double getRevenuTravail() {
 		return revenuTravail;
