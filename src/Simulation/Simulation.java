@@ -1,11 +1,15 @@
 package Simulation;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
 public class Simulation {
 
+	public String simuName;
+	
 	public int nbAgents;
 	public ArrayList<Agent> agents;
+	public ArrayList<Agent> cimetiere;
 	
 	public Marche marche;
 	public Etat etat;
@@ -17,9 +21,12 @@ public class Simulation {
 	
 	public void initSimu(){
 		
+		this.simuName = "Modèle1.essai0";
+
 		this.time = 0;
-		
 		this.marche = new Marche();
+		this.nbAgents = 20;
+		this.richesseTotale = 200.0;
 		
 		this.agents = new ArrayList<Agent>();
 		double richesseInitiale = this.richesseTotale/this.nbAgents;
@@ -34,31 +41,53 @@ public class Simulation {
 	
 	public void nextStep(){
 		
+		System.out.println("DEBUT PAS");
+		System.out.println(Display.displayResultatsGlobaux(this));
 		// ---- CONSO & INVEST
-		for (Agent agent : agents) {
+		for (Agent agent : this.agents) {
 			agent.consommation();
 			agent.epargneinvest();
 		}
 		
+		System.out.println("APRES CONSO&INVEST");
+		System.out.println(Display.displayResultatsGlobaux(this));
 		// ---- REMUNERATION
-		marche.remunerer(agents);
+		marche.remunerer(this.agents);
 		
+		System.out.println("APRES REMUNERATION");
+		System.out.println(Display.displayResultatsGlobaux(this));
 		// ---- TAXATION
-		etat.taxer(agents);
+		etat.taxer(this.agents);
 		
-		
+		System.out.println("APRES TAXATION");
+		System.out.println(Display.displayResultatsGlobaux(this));
 		// ---- MORTS
-		for (Agent agent : agents) {
+		for (Agent agent : this.agents) {
 			
 			if(agent.getAge() >= 50 ){
 				
 				this.marche.production += agent.getRichesse();
+				cimetiere.add(agent);
 				agents.remove(agent);
 			}			
 		}
 		
-		// ---- NAISSANCES
+		System.out.println("APRES MORTS");
+		System.out.println(Display.displayResultatsGlobaux(this));
+		// ---- VIEILLISSEMENT
 		for (Agent agent : agents) {
+			agent.setAge(agent.getAge()+1);
+		}	
+		
+		
+		System.out.println("APRES VIEILLISSEMENT");
+		System.out.println(Display.displayResultatsGlobaux(this));
+		// ---- NAISSANCES
+		
+		
+		this.nbAgents = this.agents.size();
+		
+		for (int i = 0; i < this.nbAgents; i++) {
 			
 			boolean nique = false;
 			
@@ -67,19 +96,16 @@ public class Simulation {
 			}
 			
 			if (nique){
-				double richesseNouveauNe = agent.getRichesse()*0.1;
-				agent.setRichesse(agent.getRichesse()*0.9);
+				double richesseNouveauNe = this.agents.get(i).getRichesse()*0.1;
+				this.agents.get(i).setRichesse(this.agents.get(i).getRichesse()*0.9);
 				
-				double muNouveauNe = agent.getMu();
+				double muNouveauNe = this.agents.get(i).getMu();
 				
-				agents.add(new Agent(this.marche, richesseNouveauNe, muNouveauNe, 0.2) );
+				this.agents.add(new Agent(this.marche, richesseNouveauNe, muNouveauNe, 0.2) );
 			}	
 		}
 		
-		// ---- VIEILLISSEMENT
-		for (Agent agent : agents) {
-			agent.setAge(agent.getAge()+1);
-		}		
+	
 		
 	}
 	
@@ -94,21 +120,19 @@ public class Simulation {
 	}
 
 	
-	public void diplay(){
-		
-	}
-	
-	
-	public void writeData(){
-		
-	}
-	
 
-	public static void main(String[] args) {
+	public static void main(String[] args) throws IOException {
 		
 		Simulation simu = new Simulation();
 		simu.initSimu();
+		Writer writer = new Writer(simu);
+		
 		simu.runSimu();
+		
+		writer.writeInfo(Display.displayResultatsGlobaux(simu));
+		
+		writer.closeWriting();
+		
 		
 	}
 }

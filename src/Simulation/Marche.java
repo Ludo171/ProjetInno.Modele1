@@ -11,7 +11,7 @@ public class Marche {
 	
 	public Marche(){
 		this.production = 0;
-		this.tauxInteret = 0.1;
+		this.tauxInteret = 0.01;
 	}
 	
 	
@@ -22,9 +22,11 @@ public class Marche {
 			normalisation += agent.getMu();
 		}
 		
+		
 		for (Agent agent : agents) {
-			agent.setRevenuTravail(agent.getRichesse() + (agent.getMu()/normalisation)*this.production);
-			agent.setRevenuCapital(agent.getInvest()*this.tauxInteret);
+			agent.setRevenuTravail((agent.getMu()/normalisation)*this.production);
+			agent.setRevenuCapital(agent.getInvest()*(this.tauxInteret));
+			agent.setRichesse(agent.getRichesse() + agent.getRevenuCapital() + agent.getRevenuTravail());
 		}
 
 		this.production=0;

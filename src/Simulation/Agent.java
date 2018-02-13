@@ -36,7 +36,7 @@ public class Agent {
 	
 	public void consommation(){
 		
-		this.conso = alpha*richesse;
+		this.conso = alpha*this.richesse;
 		this.richesse -= this.conso;
 		this.marche.production += this.conso;
 		
@@ -44,9 +44,8 @@ public class Agent {
 	
 	public void epargneinvest(){
 		this.invest = this.richesse;
-		this.richesse-= this.invest;
-		this.marche.production += this.invest;	
-				
+		this.richesse -= this.invest;
+		this.marche.production += this.invest;		
 	}
 	
 	public void mourir(){
@@ -191,5 +190,34 @@ public class Agent {
 	}
 	
 
+	@Override
+	public String toString(){
+		
+		String returnValue = "";
+		returnValue += this.id;
+		returnValue += ", ";
+		returnValue += this.age;
+		returnValue += ", ";
+		returnValue += this.richesse;
+		returnValue += ", ";
+		returnValue += this.mu;
+		returnValue += ", ";
+		returnValue += this.probaMort;
+		returnValue += ", ";
+		returnValue += this.probaEnfant;
+		returnValue += ", ";
+		returnValue += this.alpha;
+		returnValue += ", ";
+		returnValue += this.revenuTravail;
+		returnValue += ", ";
+		returnValue += this.revenuCapital;
+		returnValue += ", ";
+		returnValue += this.marche.production;
+		
+	
+		return returnValue;
+	}
+	
+	
 	
 }
