@@ -8,6 +8,8 @@ public class Agent {
 	private Marche marche;
 	private double richesse;
 	private double mu;
+	private double probaMort;
+	private double probaEnfant;
 	
 	private double conso;
 	private double invest;
@@ -156,9 +158,6 @@ public class Agent {
 		this.revenuCapital = revenuCapital;
 	}
 	
-	
-	
-	
-	
+
 	
 }
