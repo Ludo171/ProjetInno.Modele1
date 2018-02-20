@@ -25,9 +25,10 @@ public class Simulation {
 
 		this.time = 0;
 		this.marche = new Marche();
-		this.nbAgents = 20;
-		this.richesseTotale = 200.0;
+		this.nbAgents = 500;
+		this.richesseTotale = 50000.0;
 		
+		this.cimetiere = new ArrayList<Agent>();
 		this.agents = new ArrayList<Agent>();
 		double richesseInitiale = this.richesseTotale/this.nbAgents;
 		for (int i = 0; i < this.nbAgents ; i++) {
@@ -49,52 +50,51 @@ public class Simulation {
 			agent.epargneinvest();
 		}
 		
-		System.out.println("APRES CONSO&INVEST");
-		System.out.println(Display.displayResultatsGlobaux(this));
+		//System.out.println("APRES CONSO&INVEST");
+		//System.out.println(Display.displayResultatsGlobaux(this));
 		// ---- REMUNERATION
 		marche.remunerer(this.agents);
 		
-		System.out.println("APRES REMUNERATION");
-		System.out.println(Display.displayResultatsGlobaux(this));
+		//System.out.println("APRES REMUNERATION");
+		//System.out.println(Display.displayResultatsGlobaux(this));
 		// ---- TAXATION
 		etat.taxer(this.agents);
 		
-		System.out.println("APRES TAXATION");
-		System.out.println(Display.displayResultatsGlobaux(this));
+		//System.out.println("APRES TAXATION");
+		//System.out.println(Display.displayResultatsGlobaux(this));
 		// ---- MORTS
-		for (Agent agent : this.agents) {
+		int tailleListe = this.agents.size();
+		int compteur = 0;
+		while (compteur < tailleListe) {
 			
-			if(agent.getAge() >= 50 ){
-				
-				this.marche.production += agent.getRichesse();
-				cimetiere.add(agent);
-				agents.remove(agent);
+			if(this.agents.get(compteur).getAge() >= 50 ){
+				this.marche.production += this.agents.get(compteur).getRichesse();
+				cimetiere.add(this.agents.get(compteur));
+				agents.remove(this.agents.get(compteur));
+				tailleListe -=1;
 			}			
+			else{
+				compteur +=1;
+			}
 		}
 		
-		System.out.println("APRES MORTS");
-		System.out.println(Display.displayResultatsGlobaux(this));
+		//System.out.println("APRES MORTS");
+		//System.out.println(Display.displayResultatsGlobaux(this));
 		// ---- VIEILLISSEMENT
 		for (Agent agent : agents) {
 			agent.setAge(agent.getAge()+1);
 		}	
 		
 		
-		System.out.println("APRES VIEILLISSEMENT");
-		System.out.println(Display.displayResultatsGlobaux(this));
+		//System.out.println("APRES VIEILLISSEMENT");
+		//System.out.println(Display.displayResultatsGlobaux(this));
 		// ---- NAISSANCES
-		
-		
 		this.nbAgents = this.agents.size();
-		
 		for (int i = 0; i < this.nbAgents; i++) {
-			
 			boolean nique = false;
-			
 			if ( Math.random() < 0.02 ){
 				nique = true;
 			}
-			
 			if (nique){
 				double richesseNouveauNe = this.agents.get(i).getRichesse()*0.1;
 				this.agents.get(i).setRichesse(this.agents.get(i).getRichesse()*0.9);
@@ -112,7 +112,7 @@ public class Simulation {
 	
 	public void runSimu(){
 		
-		while (this.time < 50) {
+		while (this.time < 200) {
 			this.nextStep();
 			this.time += 1;
 		}

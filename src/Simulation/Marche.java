@@ -20,7 +20,7 @@ public class Marche {
 		double normalisation = 0;
 		for (Agent agent : agents) {
 			normalisation += agent.getMu();
-		}
+		}	
 		
 		
 		for (Agent agent : agents) {
